@@ -1,61 +1,15 @@
 'use strict';
 
-let isNumber = function(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-};
+let week = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+let date = new Date();
+let now = date.getDay() - 1;
 
-
-let play = function() {
-
-  let countOfAttempts = 3;
-  let secretNumber = Math.floor(Math.random() * 100) + 1;
-
-  let getAnswer = function() {
-    let userNumber = prompt('Угадай число от 1 до 100:');
-
-    if (userNumber === null) {
-      return;
-
-    } else if (!isNumber(userNumber)) {
-
-      alert('Введи число!');
-
-    } else if (userNumber > secretNumber) {
-
-      countOfAttempts--;
-      alert(`Загаданное число МЕНЬШЕ, оставшееся число попыток: ${countOfAttempts}`);
-
-    } else if (userNumber < secretNumber) {
-
-      countOfAttempts--;
-      alert(`Загаданное число БОЛЬШЕ, оставшееся число попыток: ${countOfAttempts}`);
-
-    } else {
-
-      let playAgain = confirm('Поздравляю, Вы угадали!!! Хотите сыграть ещё?');
-      if (playAgain) {
-        play();
-      } else {
-        return;
-      }
-
-    }
-
-    if (countOfAttempts === 0) {
-      let playAgain = confirm('Попытки закончились! Хотите сыграть ещё?');
-      if (playAgain) {
-        play();
-      } else {
-        return;
-      }
-    }
-
-    getAnswer();
-  };
-
-  getAnswer();
-  
-};
-
-play();
-alert('Игра окончена');
+week.forEach(function(item, i, arr) {
+  if (i === now) {
+    document.write(`<p><b>${item}</b></p>`);
+  } else if (i === 5 || i === 6) {
+    document.write(`<p><i>${item}</i></p>`);
+  } else {
+    document.write(`<p>${item}</p>`);
+  }
+});
