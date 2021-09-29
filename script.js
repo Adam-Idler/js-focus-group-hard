@@ -1,23 +1,61 @@
+'use strict';
 
-// Задание 1
-let arr = ['1234', '4356', '34', '56754', '2987', '25', '1849'];
+let isNumber = function(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
 
-for (let i = 0; i < arr.length; i++) {
-  if (arr[i][0] === '2' || arr[i][0] === '4') {
-    console.log(arr[i]);
-  }
-}
 
-// Задание 2
-for (let i = 1; i <= 100; i++) {
-  let flag = true;
-  for (let j = 2; j < i; j++) {
-    if (i % j === 0) {
-      flag = false;
-      break;
+let play = function() {
+
+  let countOfAttempts = 3;
+  let secretNumber = Math.floor(Math.random() * 100) + 1;
+
+  let getAnswer = function() {
+    let userNumber = prompt('Угадай число от 1 до 100:');
+
+    if (userNumber === null) {
+      return;
+
+    } else if (!isNumber(userNumber)) {
+
+      alert('Введи число!');
+
+    } else if (userNumber > secretNumber) {
+
+      countOfAttempts--;
+      alert(`Загаданное число МЕНЬШЕ, оставшееся число попыток: ${countOfAttempts}`);
+
+    } else if (userNumber < secretNumber) {
+
+      countOfAttempts--;
+      alert(`Загаданное число БОЛЬШЕ, оставшееся число попыток: ${countOfAttempts}`);
+
+    } else {
+
+      let playAgain = confirm('Поздравляю, Вы угадали!!! Хотите сыграть ещё?');
+      if (playAgain) {
+        play();
+      } else {
+        return;
+      }
+
     }
-  }
-  if (flag) {
-    console.log(i, '- простое число, делители этого числа: 1 и', i);
-  }
-}
+
+    if (countOfAttempts === 0) {
+      let playAgain = confirm('Попытки закончились! Хотите сыграть ещё?');
+      if (playAgain) {
+        play();
+      } else {
+        return;
+      }
+    }
+
+    getAnswer();
+  };
+
+  getAnswer();
+  
+};
+
+play();
+alert('Игра окончена');
