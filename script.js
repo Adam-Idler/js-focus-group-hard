@@ -1,51 +1,56 @@
 'use strict';
 
-let week = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-let months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-let hours = ['час', 'часа', 'часов'],
-    minuts = ['минута', 'минуты', 'минут'],
-    seconds = ['секунда', 'секунды', 'секунд'];
-
-let wordForm = function(num) {
-  let n = num % 10;
-  if (num >= 5 && num <= 20) {
-    return 2; 
-  } else if (n === 1) {
-    return 0;
-  } else if (n >= 2 && n <= 4) {
-    return 1;
-  } else {
-    return 2;
-  }
-}; // 0 - (1)час, 1 - (2-4)часа, 2 - (5...)часов
-
-let addZero = function(num) {
-  if (num < 10) {
-    num = '0' + num;
-  }
-  return num;
+let DomElement = function(selector, height, width, bg, fontSize) {
+  this.selector = selector;
+  this.height = height + 'px';
+  this.width = width + 'px';
+  this.bg = bg;
+  this.fontSize = fontSize + 'px';
 };
 
-let printDate = function() {
-  document.body.innerHTML = '';
+DomElement.prototype.createElem = function() {
+    let elem;
+    if (this.selector[0] === '.') {
 
-  let date = new Date();
+        elem = document.createElement('div');
+        elem.classList.add(`${this.selector.slice(1)}`);
+        elem.textContent = 'Двигайте квадрат стрелками на клавиатуре';
 
-  let dayOfWeek = date.getDay(),
-      day = date.getDate(),
-      month = date.getMonth(),
-      year = date.getFullYear(),
-      hour = date.getHours(),
-      minute = date.getMinutes(),
-      second = date.getSeconds();
+    } else if (this.selector[0] === '#') {
 
-  let firstString = `Сегодня ${week[dayOfWeek]}, ${day} ${months[month]} ${year} года, ${hour} ${hours[wordForm(hour)]} ${minute} ${minuts[wordForm(minute)]} ${second} ${seconds[wordForm(second)]}`;
+        elem = document.createElement('p');
+        elem.id = this.selector.slice(1);
+        elem.textContent = 'Параграф с id';
+    }
 
-  let secondString = `${addZero(day)}.${addZero(month)}.${year} - ${addZero(hour)}:${addZero(minute)}:${addZero(second)}`;
+    elem.style.cssText = `
+        height: ${this.height};
+        width: ${this.width};
+        background: ${this.bg};
+        font-size: ${this.fontSize};
+        text-align: center;
+        position: absolute;
+        top: 200px;
+        left: 200px;
+    `;
 
-  document.write(`<p style='color:red; font-family:sans-serif; font-weight: bold'>${firstString}</p>`);
-  document.write(`<p style='color:red; font-family:sans-serif; font-weight: bold'>${secondString}</p>`);
+    document.body.append(elem);
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === 'ArrowUp') {
+            elem.style.top = elem.style.top.slice(0, -2) - 10 + 'px';
+        } else if (event.key === 'ArrowLeft') {
+            elem.style.left = elem.style.left.slice(0, -2) - 10 + 'px';
+        } else if (event.key === 'ArrowRight') {
+            elem.style.left = +elem.style.left.slice(0, -2) + 10 + 'px';
+        } else if (event.key === 'ArrowDown') {
+            elem.style.top = +elem.style.top.slice(0, -2) + 10 + 'px';
+        }
+    });
 };
 
-let timerId = setInterval(printDate, 1000);
-printDate();
+let square = new DomElement('.square', 100, 100, '#5F9EA0', 'absolute');
+
+document.addEventListener("DOMContentLoaded", function() {
+    square.createElem();
+});
